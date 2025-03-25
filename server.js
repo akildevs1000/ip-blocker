@@ -8,7 +8,20 @@ const whitelistedIps = ['86.98.6.52']; // Add more if necessary
 // Log file path based on environment
 const logFile = process.env.NODE_ENV === 'production' ? '/var/log/auth.log' : 'auth.log';
 
-fs.readFile(logFile, 'utf8', (err, data) => {
+// Function to block an IP using ufw
+const blockIP = (ip) => {
+    return new Promise((resolve, reject) => {
+        exec(`sudo ufw deny from ${ip}`, (err, stdout, stderr) => {
+            if (err) {
+                reject(`Error blocking IP ${ip}: ${stderr}`);
+            }
+            resolve(`IP ${ip} blocked using ufw.`);
+        });
+    });
+};
+
+// Read the log file
+fs.readFile(logFile, 'utf8', async (err, data) => {
     if (err) {
         console.error('Error reading log file:', err);
         return;
@@ -27,19 +40,14 @@ fs.readFile(logFile, 'utf8', (err, data) => {
         }
     }
 
-    // console.table([...attackerIps]);
-
-    // Block the attacker IPs using ufw
-    [...attackerIps].forEach(ip => {
-        console.log(`Blocking IP: ${ip}`);
-
-        // Run ufw command to block the IP
-        exec(`sudo ufw deny from ${ip}`, (err, stdout, stderr) => {
-            if (err) {
-                console.error(`Error blocking IP ${ip}:`, stderr);
-                return;
-            }
-            console.log(`IP ${ip} blocked using ufw.`);
-        });
-    });
+    // Block the attacker IPs synchronously
+    for (const ip of attackerIps) {
+        try {
+            console.log(`Blocking IP: ${ip}`);
+            const result = await blockIP(ip);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 });
