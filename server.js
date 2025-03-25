@@ -4,6 +4,8 @@ require('dotenv').config();
 // Define whitelisted IPs
 const whitelistedIps = ['86.98.6.52'];
 
+console.log("🚀 ~ process.env.NODE_ENV:", process.env.NODE_ENV)
+
 // Determine log file path based on environment
 const logFile = process.env.NODE_ENV === 'production' ? '/var/log/auth.log' : 'auth.log';
 fs.readFile(logFile, 'utf8', (err, data) => {
