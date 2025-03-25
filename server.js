@@ -27,7 +27,7 @@ fs.readFile(logFile, 'utf8', (err, data) => {
         }
     }
 
-    console.table([...attackerIps]);
+    // console.table([...attackerIps]);
 
     // Block the attacker IPs using ufw
     [...attackerIps].forEach(ip => {
