@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
+const ip = "139.59.69.241";
 const port = 9923; // Port number to use
 
 // Path to the Fail2Ban log file
@@ -72,6 +73,6 @@ app.get('/', (req, res) => {
 });
 
 // Start the server on the updated port
-app.listen(port, '139.59.69.241', () => {
-    console.log(`Server running at http://localhost:${port}`);
+app.listen(port, ip, () => {
+    console.log(`Server running at http://${ip}:${port}`);
 });
