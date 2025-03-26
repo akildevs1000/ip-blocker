@@ -72,6 +72,6 @@ app.get('/', (req, res) => {
 });
 
 // Start the server on the updated port
-app.listen(port, () => {
+app.listen(port, '139.59.69.241', () => {
     console.log(`Server running at http://localhost:${port}`);
 });
